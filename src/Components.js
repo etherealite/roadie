@@ -11,6 +11,10 @@ import install from '@twind/with-web-components'
 import config from './twind.config'
 
 
+/**
+ * @import * as litTable from '@tanstack/lit-table
+ */
+
 const withTwind = install(config);
 
 class RoadyElement extends withTwind(LitElement) {}
@@ -182,24 +186,53 @@ class Dialog extends RoadyElement {
 
 
 /**
- * @typedef {term: string, parent: string, translation: string} Term
+ * @typedef {{
+ * wid: string,
+ * term: string,
+ * parent: string,
+ * translation: string
+ * }} Term
  */
 
 /** @type {Term[]} */
 const data = [
     {
+        wid: '1',
         term: 'hello',
         parent: 'world',
         translation: 'bonjour'
     },
     {
+        wid: '2',
         term: 'world',
         parent: null,
         translation: 'monde'
     }
-]
+];
 
-const columnHelper = createColumnHelper<Person>()
+/**
+ * @type {litTable.ColumnHelper<Term>}
+ */
+const columnHelper = createColumnHelper();
+
+const columns = [
+    columnHelper.display({
+        id: 'select',
+        header: ({table}) => html`
+            <input
+                type="checkbox"
+            />`,
+        cell: ({row}) => html`
+            <input
+                type="checkbox"
+            />`,
+    }),
+    columnHelper.accessor('term', {
+        header: 'Term',
+        cell: row => row.term,
+    })
+];
+
 /**
  * 
  * @see https://medium.com/@morkadosh/build-beautiful-accessible-tables-that-work-everywhere-with-lit-tanstack-table-and-twind-1275049d53a1
