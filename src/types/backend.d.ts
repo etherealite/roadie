@@ -21,6 +21,7 @@ export type ConnectNote = {
 
 export type UnSavedConnectNote = Omit<ConnectNote, 'id'>;
 
+
 export type ParsedWord = {
     wid: string;
     text: string;
@@ -32,3 +33,19 @@ export type ParsedSentence = [string, ParsedWord[]];
 export type ParsedPage = ParsedSentence[];
 
 export type ParsedBook = [string, ParsedPage[]];
+
+export type ParseError = {
+    message: string,
+    parent: Element | null,
+};
+
+export type ParseResult = {
+    parsedParent: element
+    element: Element,
+    result: ParsedWord | ParsedSentence | ParsedPage | ParsedBook | null;
+    error: ParseError | null;
+};
+
+export type ParseFunction = (node: Element) => ParseResult | null;
+
+export type ParseReducer = (arr: ParseResult[], el: Element) => ParseResult[];
