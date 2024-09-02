@@ -1,6 +1,8 @@
-FROM jzohrab/lute3:latest
+FROM mcr.microsoft.com/devcontainers/base:bookworm
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+
 
 RUN set -eux; \
     apt-get update; \

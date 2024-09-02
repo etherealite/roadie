@@ -13,13 +13,14 @@ from lute.read.service import start_reading
 from lute.read.render.renderable_calculator import TextItem
 from lute.read.routes import bp as lute_bp
 
+# from lutestubs import RenderableParagraph
 RenderableParagraph = list[RenderableSentence]
-RenderableParagraphs = list[RenderableParagraph]
+# RenderableParagraphs = list[RenderableParagraph]
 
 bp = Blueprint("roadie_read", __name__, url_prefix="/roadie/read")
 
 
-def serializable_paragraphs(paragraphs: RenderableParagraphs) -> Iterator:
+def serializable_paragraphs(paragraphs: list[RenderableParagraph]) -> Iterator:
     def textitem_dict(textitem: TextItem) -> dict:
         return dict(
             wo_id=textitem.wo_id,

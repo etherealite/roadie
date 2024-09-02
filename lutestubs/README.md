@@ -1,0 +1,1 @@
+# Static type stubs for Lute3.
