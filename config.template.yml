@@ -1,0 +1,23 @@
+# Generated file DO NOT EDIT!
+
+# The environment.  Either 'prod' or 'dev'
+ENV: dev
+
+# The database file name.
+# For tests, this must be "test_<name>.db" (e.g test_lute.db).
+# REQUIRED
+DBNAME: lute.db
+
+# Folder where data should be stored.
+# If not set, this returns the "app data" folder
+# as indicated by PlatformDirs.user_data_dir
+# (ref https://pypi.org/project/platformdirs/).
+# OPTIONAL (but REQUIRED for docker and developer tests)
+DATAPATH: {{ datapath }}
+
+# Folder where backups should be stored.
+# OPTIONAL (but REQUIRED for docker)
+# BACKUP_PATH: yourpathhere
+
+# Set IS_DOCKER: true if this is run in a container.
+IS_DOCKER: false

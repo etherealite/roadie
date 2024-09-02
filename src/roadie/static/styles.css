@@ -1,0 +1,34 @@
+/**
+ * keep slider thumb the same size on all sizes
+ */
+ @media screen and (max-width: 980px) {
+    #read-slider {
+        height: 1rem;
+    }
+}
+
+#read-slider::-webkit-slider-thumb {
+    width: 2.2rem;
+    height: 1rem;
+}
+
+
+.textsentence .textitem {
+    user-select: text;
+    cursor: pointer;
+    position: relative;
+}
+
+#final_page_controls,
+#footerNextPage {
+    font-size: 1.5rem;
+}
+#final_page_controls,
+#footerMarkRestAsKnown {
+    font-size: 1.5rem;
+}
+
+#reading-footer,
+#footerMarkRestAsKnownNextPage {
+    font-size: 1.5rem;
+}
