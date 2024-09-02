@@ -1,5 +1,1 @@
-FROM jzohrab/lute3:latest
-
-RUN pip install uv;
-
-ENTRYPOINT ["bash"]
+FROM jzohrab/lute3:3.5.2

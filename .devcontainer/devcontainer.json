@@ -1,6 +1,19 @@
 {
   "build": { "dockerfile": "Dockerfile" },
-  "forwardPorts": [],
+  "features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"username": "vscode",
+			"userUid": "1000",
+			"userGid": "1000",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": { "version": "20.17.0" },
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": { "packages": "vim" }
+  },
   "customizations": {
     // Configure properties specific to VS Code.
     "vscode": {
@@ -12,5 +25,5 @@
       ]
     }
   },
-  "overrideCommand": true
+  "remoteUser": "vscode"
 }
