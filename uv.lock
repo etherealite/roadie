@@ -1,12 +1,6 @@
 version = 1
 requires-python = ">=3.11"
 
-[manifest]
-members = [
-    "lutestubs",
-    "roadie",
-]
-
 [[package]]
 name = "beautifulsoup4"
 version = "4.12.3"
@@ -281,11 +275,6 @@ wheels = [
 ]
 
 [[package]]
-name = "lutestubs"
-version = "0.1.0"
-source = { editable = "lutestubs" }
-
-[[package]]
 name = "markupsafe"
 version = "2.1.5"
 source = { registry = "https://pypi.org/simple" }
@@ -418,7 +407,6 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "lute3" },
-    { name = "lutestubs" },
     { name = "wrapt" },
 ]
 
@@ -430,7 +418,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "lute3", specifier = ">=3.5.2" },
-    { name = "lutestubs", editable = "lutestubs" },
     { name = "wrapt", specifier = ">=1.16.0" },
 ]
 

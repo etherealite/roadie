@@ -11,6 +11,7 @@ from lute.models.term import Term, Status
 from lute.read.render.service import get_paragraphs, RenderableSentence
 from lute.read.render.renderable_calculator import TextItem
 
+
 bp: Blueprint = Blueprint("roadie", __name__, static_folder='static', static_url_path='/roadie/static')
 
 
@@ -20,14 +21,14 @@ def studylist(bookid: int) -> str:
     return "heloooo"
 
 
-RenderableParagraphs = list[RenderableSentence]
+RenderableParagraph = list[RenderableSentence]
 
 
 def book_textitems_gen(bookid: int) -> tuple[Generator[TextItem, None, None], int]:
     book = Book.find(bookid)
     page_len = len(book.texts)
     texts: Generator[str, None, None] = (txt.text for txt in book.texts)
-    paragraphs: Generator[RenderableParagraphs, None, None] = itertools.chain.from_iterable(
+    paragraphs: Generator[list[RenderableParagraph], None, None] = itertools.chain.from_iterable(
         (get_paragraphs(text, book.language) for text in texts)
     )
     sentences: Generator[RenderableSentence, None, None] = itertools.chain.from_iterable(paragraphs)
