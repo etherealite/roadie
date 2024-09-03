@@ -13,7 +13,9 @@ from lute.read.service import start_reading
 from lute.read.render.renderable_calculator import TextItem
 from lute.read.routes import bp as lute_bp
 
-# from lutestubs import RenderableParagraph
+# import lutestubs.lute.read.render
+
+from lute.read.render.service import RenderableSentence
 RenderableParagraph = list[RenderableSentence]
 # RenderableParagraphs = list[RenderableParagraph]
 
