@@ -1,10 +1,10 @@
 from g4f.client import Client
-from g4f.Provider import You
+from g4f.Provider import ChatgptFree
 
 client = Client()
 
 client = Client(
-    provider = You
+    provider = ChatgptFree
 )
 
 chat_completion = client.chat.completions.create(
