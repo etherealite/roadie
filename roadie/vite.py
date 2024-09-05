@@ -32,7 +32,6 @@ class Runner:
             raise EnvironmentError("npm is not found in the PATH. Please ensure npm is installed and available in your PATH.")
 
 
-
         process: subprocess.Popen | None = None
 
         def terminate_process() -> None:

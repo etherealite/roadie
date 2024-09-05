@@ -6,18 +6,19 @@ import logging
 from pathlib import Path
 from textwrap import dedent
 
-from jinja2 import FileSystemLoader
-from werkzeug.middleware.profiler import ProfilerMiddleware
+
+# from werkzeug.middleware.profiler import ProfilerMiddleware
 from flask import Flask
-from flask import g
+
 
 from lute.app_factory import create_app as lute_create_app
 
 from .routes import bp as roady_bp
 from .read.routes import bp as roady_read_bp
-
+from .override import OverrideLute
 
 from .vite import Vite
+
 
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
@@ -63,23 +64,15 @@ def create_dev_config() -> Path:
 
     return genconfig_file
 
-def override_context_processor():
-    head_after_scripts = dedent(f"""
-        <link rel="stylesheet" type="text/css" href="/{asset_path}/styles.css" />                   
-    """)
-    return dict(head_after_scripts=head_after_scripts)
-
 
 def create_app () -> Flask:
     config_file = create_dev_config()
     app: Flask = lute_create_app(config_file)
-    app.jinja_loader = FileSystemLoader([
-        str(module_root / 'templates' / 'overrides'),
-        str(Path(app.root_path, app.template_folder)),
-    ])
+    override = OverrideLute()
+    override.init_lute_app(app)
     vite = Vite()
     vite.init_app(app)
-    app.context_processor(override_context_processor)
+
     app.register_blueprint(roady_bp)
     app.register_blueprint(roady_read_bp)
     # app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('cumtime',), restrictions=(.10,))
