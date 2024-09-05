@@ -1,19 +1,41 @@
-from flask import Flask
+import shutil
 import subprocess
 import atexit
 import signal
+from types import SimpleNamespace
 from textwrap import dedent
+from typing import Callable, TypedDict
 
-NPM_BIN_PATH = "/path/to/npm"  # Update this to your actual npm path
+from flask import Flask
+from flask_vite import Vite as FlaskVite
 
-class NPMError(Exception):
-    pass
 
-def create_npm_runner(cwd="", npm_bin_path=NPM_BIN_PATH):
-    def run(*args):
-        process = None
+class Vite:
+    def __init__(self):
+        self.runner = Runner()
+    def init_app(self, app: Flask):
+        wraped_vite = FlaskVite()
+        wraped_vite.init_app(app)
 
-        def terminate_process():
+        @app.before_request
+        def start_npm_process() -> None:
+            if not self.runner.running:
+                self.runner.run("dev")
+
+class Runner:
+    def __init__(self):
+        self.running: bool = False
+    def run(self, *args: str) -> None:
+        npm_bin_path: str | None = shutil.which("npm")
+
+        if npm_bin_path is None:
+            raise EnvironmentError("npm is not found in the PATH. Please ensure npm is installed and available in your PATH.")
+
+
+
+        process: subprocess.Popen | None = None
+
+        def terminate_process() -> None:
             if process and process.poll() is None:  # Check if the process is still running
                 process.send_signal(signal.SIGTERM)  # Send SIGTERM for graceful shutdown
                 try:
@@ -21,43 +43,8 @@ def create_npm_runner(cwd="", npm_bin_path=NPM_BIN_PATH):
                 except subprocess.TimeoutExpired:
                     process.kill()  # Force kill if it doesn't terminate in time
 
-        try:
-            _args = [npm_bin_path, *list(args)]
-            process = subprocess.Popen(_args, cwd=cwd)
-            atexit.register(terminate_process)
-        except OSError as e:
-            if e.filename == npm_bin_path:
-                msg = """
-                It looks like node.js and/or npm is not installed or cannot be found.
-                Visit https://nodejs.org to download and install node.js for your system.
-                """
-            elif e.filename == cwd:
-                msg = f"""
-                It looks like the current working directory for vite is not correct.
-                cwd: {cwd}
-                """
-            else:
-                msg = f"""
-                An error occurred while running npm.
-                cwd: {cwd}
-                npm_bin_path: {npm_bin_path}
-                """
 
-            raise NPMError(dedent(msg))
-
-    return run
-
-app = Flask(__name__)
-
-@app.before_first_request
-def start_npm_process():
-    app.npm_runner = create_npm_runner(cwd="/path/to/project")
-    app.npm_runner("install")
-
-@app.teardown_appcontext
-def stop_npm_process(exception=None):
-    if hasattr(app, 'npm_runner'):
-        app.npm_runner.terminate_process()
-
-if __name__ == "__main__":
-    app.run()
+        _args = [npm_bin_path, *args]
+        process = subprocess.Popen(_args)
+        self.running = True
+        atexit.register(terminate_process)
